@@ -1,7 +1,6 @@
-import dotenv from "dotenv";
-dotenv.config();
-import pkg from 'pg';
-const { Pool } = pkg;import { drizzle } from "drizzle-orm/neon-http";
+import "dotenv/config";
+import { drizzle } from "drizzle-orm/neon-http";
+import { neon } from "@neondatabase/serverless";
 import { filaments, projects, project_filaments, type Filament, type Project, type ProjectFilament, type InsertFilament, type InsertProject, type InsertProjectFilament } from "@shared/schema";
 import { eq, like, or, ilike } from "drizzle-orm";
 
@@ -9,8 +8,8 @@ if (!process.env.DATABASE_URL) {
   throw new Error("DATABASE_URL is required");
 }
 
-const pool = new Pool({ connectionString: process.env.DATABASE_URL });
-const db = drizzle(pool);
+const sql = neon(process.env.DATABASE_URL!);
+const db = drizzle(sql);
 
 export interface IStorage {
   // Filament operations
